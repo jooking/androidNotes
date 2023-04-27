@@ -1,0 +1,29 @@
+`buildSrc`  是一个特殊的 Gradle 项目，它允许你为你的 Gradle 构建脚本提供可重用的构建逻辑和定制任务。在  `buildSrc`  项目中，你可以使用任何支持的编程语言（如 Groovy, Kotlin, Java 等）来编写复杂的构建逻辑，提供自定义任务、插件等等。
+ 以下是构建一个  `buildSrc`  项目的基本步骤：
+ 1. 在你的项目根目录下创建一个名为  `buildSrc`  的文件夹。
+2. 在  `buildSrc`  文件夹中创建一个  `build.gradle.kts`  文件，并添加以下内容：
+plugins {
+    `kotlin-dsl`
+}
+ repositories {
+    jcenter()
+}
+ dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+}
+3. 在  `buildSrc/src/main`  文件夹中创建一个  `kotlin`  目录，所有的构建逻辑代码都可以放在这里。
+4. 在  `kotlin`  目录中创建一个名为  `MyPlugin`  的类，并实现  `org.gradle.api.Plugin`  接口。
+5. 在  `MyPlugin`  中实现你自己的插件逻辑，并在  `apply`  方法中注册自定义任务等。
+ 你的  `buildSrc`  项目现在已经准备就绪了。你可以引用  `buildSrc`  中的任务和插件，只需要在你的项目构建脚本中添加以下代码：
+buildscript {
+    repositories {
+        jcenter()
+    }
+     dependencies {
+        // 引用 MyPlugin 插件
+        classpath("com.example:my-plugin:1.0.0")
+    }
+}
+ // 应用 MyPlugin 插件
+apply(plugin = "com.example.my-plugin")
+在上面的示例中， `MyPlugin`  是你在  `buildSrc`  项目中实现的自定义插件， `com.example.my-plugin`  是你的插件的组织和名称， `1.0.0`  是你的插件的版本号。现在，你可以使用插件中提供的任务和功能了。
